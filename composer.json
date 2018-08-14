@@ -1,0 +1,6 @@
+{
+  "name": "mice-tm/tm-service-discounts-client",
+  "require": {
+    "php": ">=5.3.3"
+  }
+}
