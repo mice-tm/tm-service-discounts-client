@@ -1,6 +1,21 @@
 {
   "name": "mice-tm/tm-service-discounts-client",
+  "keywords": ["client", "templatemonster", "service-discounts"],
+  "license": "BSD-3-Clause",
+  "minimum-stability": "stable",
+  "authors": [
+    {
+      "name": "Iryna Mychkova",
+      "email": "imychkova@gmail.com",
+      "role": "Developer"
+    }
+  ],
   "require": {
     "php": ">=5.3.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "micetm\\Clients\\ServiceDiscounts": "src"
+    }
   }
 }
