@@ -54,7 +54,7 @@ class DiscountsClient
             $response = $this->browser->get(
                 $this->serviceUrl . "/" . $code
             );
-            if (201 !== $response->getStatusCode()) {
+            if (200 !== $response->getStatusCode()) {
                 throw new \Exception($response->getReasonPhrase());
             }
             return new Discount(json_decode($response->getBody(), true));
