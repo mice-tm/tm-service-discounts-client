@@ -62,4 +62,25 @@ class DiscountsClient
             $this->logger->warning("Discount request error");
         }
     }
+    
+    public function applyDiscount()
+    {
+        
+    }
+
+    /**
+     * not implemented yet
+     */
+    public function deleteDiscount()
+    {
+        
+    }
+
+    /**
+     * not implemented yet
+     */
+    public function updateDiscount()
+    {
+
+    }
 }
