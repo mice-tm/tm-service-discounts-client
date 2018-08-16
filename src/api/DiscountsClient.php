@@ -20,7 +20,13 @@ class DiscountsClient
     /** @var LoggerInterface */
     protected $logger;
 
-    public function __construct($accessToken, $serviceUrl, LoggerInterface $logger = null)
+    /**
+     * DiscountsClient constructor.
+     * @param $accessToken
+     * @param $serviceUrl
+     * @param LoggerInterface $logger
+     */
+    public function __construct($accessToken, $serviceUrl, LoggerInterface $logger)
     {
         $this->accessToken = $accessToken;
         $this->serviceUrl = $serviceUrl . 'v2/discounts';
@@ -28,8 +34,15 @@ class DiscountsClient
         $this->browser = new Browser(new FileGetContents([]));
     }
 
+    /**
+     * @param array $params
+     * @return Discount|void
+     */
     public function createNewDiscount($params = [])
     {
+        if (empty($params)) {
+            return;
+        }
         try {
             $response = $this->browser->post(
                 $this->serviceUrl,
@@ -44,12 +57,23 @@ class DiscountsClient
             }
             return new Discount(json_decode($response->getBody(), true));
         } catch (\Exception $exception) {
-            $this->logger->warning("Discount creation error. " . $exception->getMessage());
+            $this->logger->warning(
+                "Discount creation error. " . $exception->getMessage(),
+                $exception->getTrace()
+            );
         }
     }
 
+    /**
+     * @param $code
+     * @return Discount|void
+     */
     public function viewDiscount($code)
     {
+        if (empty($code)) {
+            return;
+        }
+
         try {
             $response = $this->browser->get(
                 $this->serviceUrl . "/" . $code
@@ -59,28 +83,105 @@ class DiscountsClient
             }
             return new Discount(json_decode($response->getBody(), true));
         } catch (\Exception $exception) {
-            $this->logger->warning("Discount request error");
+            $this->logger->warning(
+                "Discount view request error ". $code,
+                $exception->getTrace()
+            );
         }
     }
-    
-    public function applyDiscount()
+
+    /**
+     * @param string $code
+     * @param array $products
+     * @return Discount|void
+     */
+    public function applyDiscount($code, $products = [])
     {
-        
+        if (empty($products) || empty($code)) {
+            return;
+        }
+
+        try {
+            $response = $this->browser->post(
+                $this->serviceUrl . "/" . $code . "/applicability",
+                [
+                    'Authorization' => $this->accessToken,
+                    'Content-Type' => 'application/json'
+                ],
+                json_encode([
+                    'products' => $products
+                ])
+            );
+            if (200 !== $response->getStatusCode()) {
+                throw new \Exception($response->getReasonPhrase());
+            }
+            return new Discount(json_decode($response->getBody(), true));
+        } catch (\Exception $exception) {
+            $this->logger->warning(
+                "Discount applicability request error ". $code,
+                $exception->getTrace()
+            );
+        }
     }
 
     /**
-     * not implemented yet
+     * @param string $code
+     * @return Discount|void
      */
-    public function deleteDiscount()
+    public function deleteDiscount($code)
     {
-        
+        if (empty($code)) {
+            return;
+        }
+
+        try {
+            $response = $this->browser->delete(
+                $this->serviceUrl . "/" . $code,
+                [
+                    'Authorization' => $this->accessToken,
+                ]
+            );
+            if (204 !== $response->getStatusCode()) {
+                throw new \Exception($response->getReasonPhrase());
+            }
+            return new Discount(json_decode($response->getBody(), true));
+        } catch (\Exception $exception) {
+            $this->logger->warning(
+                "Discount delete request error ". $code,
+                $exception->getTrace()
+            );
+        }
     }
 
     /**
-     * not implemented yet
+     * @param $code
+     * @param array $params
+     * @return Discount|void
      */
-    public function updateDiscount()
+    public function updateDiscount($code, $params = [])
     {
+        if (empty($code) || empty($params)) {
+            return;
+        }
 
+        try {
+            $response = $this->browser->put(
+                $this->serviceUrl . "/" . $code,
+                [
+                    'Authorization' => $this->accessToken,
+                    'Content-Type' => 'application/json'
+                ],
+                json_encode($params)
+            );
+            if (200 !== $response->getStatusCode()) {
+                throw new \Exception($response->getReasonPhrase());
+            }
+            return new Discount(json_decode($response->getBody(), true));
+        } catch (\Exception $exception) {
+            $this->logger->warning(
+                "Discount update request error ". $code . " " . $exception->getMessage(),
+                $exception->getTrace()
+            );
+        }
     }
 }

@@ -43,6 +43,9 @@ class Discount
     public $email;
     public $info;
 
+    /** @var array */
+    public $applicability;
+
     private static $discountTypes = [
         self::DISCOUNT_TYPE_AMOUNT => '$',
         self::DISCOUNT_TYPE_PERCENT => '%',
