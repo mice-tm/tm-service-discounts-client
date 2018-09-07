@@ -31,14 +31,14 @@ class DiscountsClient
         $this->accessToken = $accessToken;
         $this->serviceUrl = $serviceUrl . 'v2/discounts';
         $this->logger = $logger;
-        $this->browser = new Browser(new FileGetContents([]));
+        $this->browser = new Browser(new FileGetContents(array()));
     }
 
     /**
      * @param array $params
      * @return Discount|void
      */
-    public function createNewDiscount($params = [])
+    public function createNewDiscount($params = array())
     {
         if (empty($params)) {
             return;
@@ -95,7 +95,7 @@ class DiscountsClient
      * @param array $products
      * @return Discount|void
      */
-    public function applyDiscount($code, $products = [])
+    public function applyDiscount($code, $products = array())
     {
         if (empty($products) || empty($code)) {
             return;
@@ -158,7 +158,7 @@ class DiscountsClient
      * @param array $params
      * @return Discount|void
      */
-    public function updateDiscount($code, $params = [])
+    public function updateDiscount($code, $params = array())
     {
         if (empty($code) || empty($params)) {
             return;
