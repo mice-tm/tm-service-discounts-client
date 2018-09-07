@@ -6,7 +6,7 @@ use Buzz\Client\FileGetContents;
 use micetm\Clients\ServiceDiscounts\models\Discount;
 use Psr\Log\LoggerInterface;
 
-class DiscountsClient
+class DiscountsClient implements DiscountsClientInterface
 {
     /** @var string */
     protected $accessToken;
@@ -46,10 +46,10 @@ class DiscountsClient
         try {
             $response = $this->browser->post(
                 $this->serviceUrl,
-                [
+                array(
                     'Authorization' => $this->accessToken,
                     'Content-Type' => 'application/json'
-                ],
+                ),
                 json_encode($params)
             );
             if (201 !== $response->getStatusCode()) {
@@ -104,13 +104,13 @@ class DiscountsClient
         try {
             $response = $this->browser->post(
                 $this->serviceUrl . "/" . $code . "/applicability",
-                [
+                array(
                     'Authorization' => $this->accessToken,
                     'Content-Type' => 'application/json'
-                ],
-                json_encode([
+                ),
+                json_encode(array(
                     'products' => $products
-                ])
+                ))
             );
             if (200 !== $response->getStatusCode()) {
                 throw new \Exception($response->getReasonPhrase());
@@ -137,9 +137,9 @@ class DiscountsClient
         try {
             $response = $this->browser->delete(
                 $this->serviceUrl . "/" . $code,
-                [
+                array(
                     'Authorization' => $this->accessToken,
-                ]
+                )
             );
             if (204 !== $response->getStatusCode()) {
                 throw new \Exception($response->getReasonPhrase());
@@ -167,10 +167,10 @@ class DiscountsClient
         try {
             $response = $this->browser->put(
                 $this->serviceUrl . "/" . $code,
-                [
+                array(
                     'Authorization' => $this->accessToken,
                     'Content-Type' => 'application/json'
-                ],
+                ),
                 json_encode($params)
             );
             if (200 !== $response->getStatusCode()) {

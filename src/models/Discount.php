@@ -46,32 +46,32 @@ class Discount
     /** @var array */
     public $applicability;
 
-    private static $discountTypes = [
+    private static $discountTypes = array(
         self::DISCOUNT_TYPE_AMOUNT => '$',
         self::DISCOUNT_TYPE_PERCENT => '%',
-    ];
+    );
 
-    private static $statuses = [
+    private static $statuses = array(
         self::STATUS_ACTIVE,
         self::STATUS_INACTIVE,
         self::STATUS_DISABLED,
         self::STATUS_USED,
         self::STATUS_EXPIRED,
         self::STATUS_DELETED,
-    ];
+    );
 
-    private static $types = [
+    private static $types = array (
         self::TYPE_SERVER => 'simple',
         self::TYPE_USER => 'simple',
         self::TYPE_TRIGGER => 'discount_link',
-    ];
+    );
 
-    private static $namespaces = [
+    private static $namespaces = array (
         self::NAMESPACE_PRODUCTS,
         self::NAMESPACE_SERVICES,
         self::NAMESPACE_BUNDLES,
         self::NAMESPACE_MEMBERSHIPS,
-    ];
+    );
 
     public function __construct($params = array())
     {
@@ -108,7 +108,7 @@ class Discount
 
     public function attributes()
     {
-        return [
+        return array (
             'id',
             'discount_value',
             'discount_type',
@@ -127,7 +127,7 @@ class Discount
             'project',
             'namespace',
             'info',
-            'email',
-        ];
+            'email'
+        );
     }
 }
