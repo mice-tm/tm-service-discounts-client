@@ -73,7 +73,7 @@ class Discount
         self::NAMESPACE_MEMBERSHIPS,
     ];
 
-    public function __construct($params = [])
+    public function __construct($params = array())
     {
         $this->load($params);
     }
@@ -83,7 +83,7 @@ class Discount
         return $this->status === self::STATUS_ACTIVE;
     }
 
-    public function load($params = [])
+    public function load($params = array())
     {
         if (!is_array($params)) {
             return;
