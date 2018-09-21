@@ -2,7 +2,6 @@
 namespace micetm\Clients\ServiceDiscounts\api;
 
 use Buzz\Browser;
-use Buzz\Client\FileGetContents;
 use micetm\Clients\ServiceDiscounts\models\Discount;
 use Psr\Log\LoggerInterface;
 
@@ -31,7 +30,7 @@ class DiscountsClient implements DiscountsClientInterface
         $this->accessToken = $accessToken;
         $this->serviceUrl = $serviceUrl . 'v2/discounts';
         $this->logger = $logger;
-        $this->browser = new Browser(new FileGetContents(array()));
+        $this->browser = new Browser();
     }
 
     /**
@@ -55,7 +54,7 @@ class DiscountsClient implements DiscountsClientInterface
             if (201 !== $response->getStatusCode()) {
                 throw new \Exception($response->getReasonPhrase());
             }
-            return new Discount(json_decode($response->getBody(), true));
+            return new Discount(json_decode($response->getContent(), true));
         } catch (\Exception $exception) {
             $this->logger->warning(
                 "Discount creation error. " . $exception->getMessage(),
@@ -81,7 +80,7 @@ class DiscountsClient implements DiscountsClientInterface
             if (200 !== $response->getStatusCode()) {
                 throw new \Exception($response->getReasonPhrase());
             }
-            return new Discount(json_decode($response->getBody(), true));
+            return new Discount(json_decode($response->getContent(), true));
         } catch (\Exception $exception) {
             $this->logger->warning(
                 "Discount view request error ". $code,
@@ -115,7 +114,7 @@ class DiscountsClient implements DiscountsClientInterface
             if (200 !== $response->getStatusCode()) {
                 throw new \Exception($response->getReasonPhrase());
             }
-            return new Discount(json_decode($response->getBody(), true));
+            return new Discount(json_decode($response->getContent(), true));
         } catch (\Exception $exception) {
             $this->logger->warning(
                 "Discount applicability request error ". $code,
@@ -144,7 +143,7 @@ class DiscountsClient implements DiscountsClientInterface
             if (204 !== $response->getStatusCode()) {
                 throw new \Exception($response->getReasonPhrase());
             }
-            return new Discount(json_decode($response->getBody(), true));
+            return new Discount(json_decode($response->getContent(), true));
         } catch (\Exception $exception) {
             $this->logger->warning(
                 "Discount delete request error ". $code,
@@ -176,7 +175,7 @@ class DiscountsClient implements DiscountsClientInterface
             if (200 !== $response->getStatusCode()) {
                 throw new \Exception($response->getReasonPhrase());
             }
-            return new Discount(json_decode($response->getBody(), true));
+            return new Discount(json_decode($response->getContent(), true));
         } catch (\Exception $exception) {
             $this->logger->warning(
                 "Discount update request error ". $code . " " . $exception->getMessage(),
