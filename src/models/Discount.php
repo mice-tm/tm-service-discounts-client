@@ -42,6 +42,7 @@ class Discount
     public $namespace;
     public $email;
     public $info;
+    public $conditions;
 
     /** @var array */
     public $applicability;
@@ -127,7 +128,8 @@ class Discount
             'project',
             'namespace',
             'info',
-            'email'
+            'email',
+            'conditions',
         );
     }
 }
