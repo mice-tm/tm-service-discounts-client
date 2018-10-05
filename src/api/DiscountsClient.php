@@ -94,7 +94,7 @@ class DiscountsClient implements DiscountsClientInterface
      * @param array $products
      * @return Discount|void
      */
-    public function applyDiscount($code, $products = array())
+    public function applyDiscount($code, $products = array(), $cart = array())
     {
         if (empty($products) || empty($code)) {
             return;
@@ -108,7 +108,8 @@ class DiscountsClient implements DiscountsClientInterface
                     'Content-Type' => 'application/json'
                 ),
                 json_encode(array(
-                    'products' => $products
+                    'items' => $products,
+                    'cart' => $cart,
                 ))
             );
             if (200 !== $response->getStatusCode()) {
