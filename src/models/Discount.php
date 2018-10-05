@@ -130,6 +130,7 @@ class Discount
             'info',
             'email',
             'conditions',
+            'applicability',
         );
     }
 }
