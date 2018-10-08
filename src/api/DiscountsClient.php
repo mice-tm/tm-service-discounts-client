@@ -187,7 +187,7 @@ class DiscountsClient implements DiscountsClientInterface
 
     /**
      * @param array $params
-     * @return Discount|void
+     * @return Discount[]|void
      */
     public function findDiscounts($params = array())
     {
@@ -203,7 +203,11 @@ class DiscountsClient implements DiscountsClientInterface
             if (200 !== $response->getStatusCode()) {
                 throw new \Exception($response->getReasonPhrase());
             }
-            return new Discount(json_decode($response->getContent(), true));
+            $discontList = array();
+            foreach (json_decode($response->getContent(), true) as $discont) {
+                $discontList[] = new Discount($discont);
+            }
+            return $discontList;
         } catch (\Exception $exception) {
             $this->logger->warning(
                 "Discount find request error " . $exception->getMessage(),
