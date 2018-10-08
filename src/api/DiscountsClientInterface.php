@@ -37,4 +37,10 @@ interface DiscountsClientInterface
      * @return Discount|void
      */
     public function updateDiscount($code, $params = array());
+
+    /**
+     * @param array $params
+     * @return Discount|void
+     */
+    public function findDiscounts($params = array());
 }

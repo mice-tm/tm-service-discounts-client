@@ -184,4 +184,31 @@ class DiscountsClient implements DiscountsClientInterface
             );
         }
     }
+
+    /**
+     * @param array $params
+     * @return Discount|void
+     */
+    public function findDiscounts($params = array())
+    {
+        try {
+            $response = $this->browser->get(
+                $this->serviceUrl,
+                array(
+                    'Authorization' => $this->accessToken,
+                    'Content-Type' => 'application/json'
+                ),
+                json_encode($params)
+            );
+            if (200 !== $response->getStatusCode()) {
+                throw new \Exception($response->getReasonPhrase());
+            }
+            return new Discount(json_decode($response->getContent(), true));
+        } catch (\Exception $exception) {
+            $this->logger->warning(
+                "Discount find request error " . $exception->getMessage(),
+                $exception->getTrace()
+            );
+        }
+    }
 }
