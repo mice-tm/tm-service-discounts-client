@@ -165,7 +165,7 @@ class DiscountsClient implements DiscountsClientInterface
         }
 
         try {
-            $response = $this->browser->put(
+            $response = $this->browser->patch(
                 $this->serviceUrl . "/" . $code,
                 array(
                     'Authorization' => $this->accessToken,
