@@ -165,7 +165,7 @@ class DiscountsClient implements DiscountsClientInterface
         }
 
         try {
-            $response = $this->browser->put(
+            $response = $this->browser->patch(
                 $this->serviceUrl . "/" . $code,
                 array(
                     'Authorization' => $this->accessToken,
@@ -193,12 +193,11 @@ class DiscountsClient implements DiscountsClientInterface
     {
         try {
             $response = $this->browser->get(
-                $this->serviceUrl,
+                $this->serviceUrl . '?' . http_build_query($params),
                 array(
                     'Authorization' => $this->accessToken,
                     'Content-Type' => 'application/json'
-                ),
-                json_encode($params)
+                )
             );
             if (200 !== $response->getStatusCode()) {
                 throw new \Exception($response->getReasonPhrase());
