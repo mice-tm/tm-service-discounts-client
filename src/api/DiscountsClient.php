@@ -4,7 +4,7 @@ namespace micetm\Clients\ServiceDiscounts\api;
 use Buzz\Browser;
 use micetm\Clients\ServiceDiscounts\exceptions\DiscountNotFound;
 use micetm\Clients\ServiceDiscounts\exceptions\RequiredFieldsEmpty;
-use micetm\Clients\ServiceDiscounts\exceptions\RuntimeException;
+use RuntimeException;
 use micetm\Clients\ServiceDiscounts\models\Discount;
 use Psr\Log\LoggerInterface;
 
