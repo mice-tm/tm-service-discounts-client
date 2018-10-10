@@ -2,6 +2,9 @@
 namespace micetm\Clients\ServiceDiscounts\api;
 
 use Buzz\Browser;
+use micetm\Clients\ServiceDiscounts\exceptions\DiscountNotFound;
+use micetm\Clients\ServiceDiscounts\exceptions\RequiredFieldsEmpty;
+use RuntimeException;
 use micetm\Clients\ServiceDiscounts\models\Discount;
 use Psr\Log\LoggerInterface;
 
@@ -34,14 +37,14 @@ class DiscountsClient implements DiscountsClientInterface
     }
 
     /**
-     * @param array $params
-     * @return Discount|void
+     * @inheritdoc
      */
     public function createNewDiscount($params = array())
     {
         if (empty($params)) {
-            return;
+            throw new RequiredFieldsEmpty(array('params'));
         }
+
         try {
             $response = $this->browser->post(
                 $this->serviceUrl,
@@ -60,17 +63,21 @@ class DiscountsClient implements DiscountsClientInterface
                 "Discount creation error. " . $exception->getMessage(),
                 $exception->getTrace()
             );
+            throw new RuntimeException(
+                "Discount creation error. " . $exception->getMessage(),
+                $exception->getCode(),
+                $exception
+            );
         }
     }
 
     /**
-     * @param $code
-     * @return Discount|void
+     * @inheritdoc
      */
     public function viewDiscount($code)
     {
         if (empty($code)) {
-            return;
+            throw new RequiredFieldsEmpty(array('code'));
         }
 
         try {
@@ -86,18 +93,17 @@ class DiscountsClient implements DiscountsClientInterface
                 "Discount view request error ". $code,
                 $exception->getTrace()
             );
+            throw new DiscountNotFound($code);
         }
     }
 
     /**
-     * @param string $code
-     * @param array $products
-     * @return Discount|void
+     * @inheritdoc
      */
     public function applyDiscount($code, $products = array(), $cart = array())
     {
         if (empty($products) || empty($code)) {
-            return;
+            throw new RequiredFieldsEmpty(array('products', 'code'));
         }
 
         try {
@@ -121,17 +127,18 @@ class DiscountsClient implements DiscountsClientInterface
                 "Discount applicability request error ". $code,
                 $exception->getTrace()
             );
+
+            throw new DiscountNotFound($code);
         }
     }
 
     /**
-     * @param string $code
-     * @return Discount|void
+     * @inheritdoc
      */
     public function deleteDiscount($code)
     {
         if (empty($code)) {
-            return;
+            throw new RequiredFieldsEmpty(array('code'));
         }
 
         try {
@@ -144,24 +151,27 @@ class DiscountsClient implements DiscountsClientInterface
             if (204 !== $response->getStatusCode()) {
                 throw new \Exception($response->getReasonPhrase());
             }
-            return new Discount(json_decode($response->getContent(), true));
+            return true;
         } catch (\Exception $exception) {
             $this->logger->warning(
                 "Discount delete request error ". $code,
                 $exception->getTrace()
             );
+            throw new RuntimeException(
+                "Discount delete request error " . $exception->getMessage(),
+                $exception->getCode(),
+                $exception
+            );
         }
     }
 
     /**
-     * @param $code
-     * @param array $params
-     * @return Discount|void
+     * @inheritdoc
      */
     public function updateDiscount($code, $params = array())
     {
         if (empty($code) || empty($params)) {
-            return;
+            throw new RequiredFieldsEmpty(array('code', 'params'));
         }
 
         try {
@@ -182,12 +192,17 @@ class DiscountsClient implements DiscountsClientInterface
                 "Discount update request error ". $code . " " . $exception->getMessage(),
                 $exception->getTrace()
             );
+
+            throw new RuntimeException(
+                "Discount update request error " . $exception->getMessage(),
+                $exception->getCode(),
+                $exception
+            );
         }
     }
 
     /**
-     * @param array $params
-     * @return Discount[]|void
+     * @inheritdoc
      */
     public function findDiscounts($params = array())
     {
@@ -202,16 +217,18 @@ class DiscountsClient implements DiscountsClientInterface
             if (200 !== $response->getStatusCode()) {
                 throw new \Exception($response->getReasonPhrase());
             }
-            $discontList = array();
-            foreach (json_decode($response->getContent(), true) as $discont) {
-                $discontList[] = new Discount($discont);
+            $discountList = array();
+            foreach (json_decode($response->getContent(), true) as $discount) {
+                $discountList[] = new Discount($discount);
             }
-            return $discontList;
+            return $discountList;
         } catch (\Exception $exception) {
             $this->logger->warning(
                 "Discount find request error " . $exception->getMessage(),
                 $exception->getTrace()
             );
+
+            return array();
         }
     }
 }
