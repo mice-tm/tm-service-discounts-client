@@ -37,10 +37,7 @@ class DiscountsClient implements DiscountsClientInterface
     }
 
     /**
-     * @param array $params
-     * @return Discount
-     * @throws RequiredFieldsEmpty
-     * @throws RuntimeException
+     * @inheritdoc
      */
     public function createNewDiscount($params = array())
     {
@@ -75,10 +72,7 @@ class DiscountsClient implements DiscountsClientInterface
     }
 
     /**
-     * @param $code
-     * @return Discount
-     * @throws RequiredFieldsEmpty
-     * @throws DiscountNotFound
+     * @inheritdoc
      */
     public function viewDiscount($code)
     {
@@ -104,13 +98,7 @@ class DiscountsClient implements DiscountsClientInterface
     }
 
     /**
-     * @param string $code
-     * @param array $products
-     * @param array $cart
-     * @return Discount
-     *
-     * @throws RequiredFieldsEmpty
-     * @throws DiscountNotFound
+     * @inheritdoc
      */
     public function applyDiscount($code, $products = array(), $cart = array())
     {
@@ -145,11 +133,7 @@ class DiscountsClient implements DiscountsClientInterface
     }
 
     /**
-     * @param string $code
-     * @return bool
-     *
-     * @throws RequiredFieldsEmpty
-     * @throws RuntimeException
+     * @inheritdoc
      */
     public function deleteDiscount($code)
     {
@@ -182,12 +166,7 @@ class DiscountsClient implements DiscountsClientInterface
     }
 
     /**
-     * @param $code
-     * @param array $params
-     * @return Discount
-     *
-     * @throws RequiredFieldsEmpty
-     * @throws RuntimeException
+     * @inheritdoc
      */
     public function updateDiscount($code, $params = array())
     {
@@ -223,8 +202,7 @@ class DiscountsClient implements DiscountsClientInterface
     }
 
     /**
-     * @param array $params
-     * @return Discount[]
+     * @inheritdoc
      */
     public function findDiscounts($params = array())
     {
